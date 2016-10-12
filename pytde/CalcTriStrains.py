@@ -174,6 +174,8 @@ def advs(y1,y2,y3,a,b,nu,B1,B2,B3):
   # differentiating the expressions for the displacements (Comninou and
   # Dunders, 1975, with typos noted by Thomas 1993) then combining the
   # elements of the displacement gradient tensor to form the strain tensor.
+
+  # the following variables were defined reduce redundant calculations
   sinb = sin(b)
   cosb = cos(b)
   tanb = tan(b)
