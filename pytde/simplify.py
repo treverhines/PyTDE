@@ -46,9 +46,8 @@ e33 = lines[186][8:]
 e12 = lines[186][8:]
 e13 = lines[186][8:]
 e23 = lines[186][8:]
-all = '+'.join([e11,e22,e33,e12,e13,e22])
-
-terms = find_parentheticals(string)
+sall = '+'.join(lines[193:])
+terms = find_parentheticals(sall)
 unique_terms = list(set(terms))
 blerg = []
 for t in unique_terms:

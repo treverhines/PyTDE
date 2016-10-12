@@ -1,0 +1,1 @@
+from pytde.CalcTriStrains import calc_tri_strains
