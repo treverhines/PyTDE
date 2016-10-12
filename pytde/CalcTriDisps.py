@@ -6,9 +6,17 @@ from numpy import (pi,cross,dot,sin,cos,tan,arctan2,log,
                    sqrt,array,asarray,zeros,empty,copy,
                    nonzero)
 from numpy.linalg import norm,det
+from matplotlib.path import Path
 def cot(x):
   return 1.0/tan(x)
   
+def inpolygon(sx,sy,x,y):
+  vert = array([x,y]).T
+  points = array([sx,sy]).T
+  p = Path(vert)
+  return p.contains_points(points)
+  
+
 def calc_tri_disps(sx, sy, sz, x, y, z, pr, ss, ts, ds):
   ''' 
   Calculates displacements due to slip on a triangular dislocation in an
@@ -118,7 +126,7 @@ def calc_tri_disps(sx, sy, sz, x, y, z, pr, ss, ts, ds):
     lts = dot(slipVec,tsVec)
     lds = dot(slipVec,dsVec)
 
-    if (abs(beta) > 0.000001) && (abs(beta-pi) > 0.000001):
+    if (abs(beta) > 0.000001) & (abs(beta-pi) > 0.000001):
       # First angular dislocation
       sx1,sy1 = rotate_xy_vec(sx-x[iTri],sy-y[iTri],-strike)
       ux1,uy1,uz1 = adv(sx1, sy1, sz-z[iTri],z[iTri],beta,pr,lss,lts,lds)
@@ -139,9 +147,9 @@ def calc_tri_disps(sx, sy, sz, x, y, z, pr, ss, ts, ds):
   # Identify indices for stations under current triangle
   inPolyIdx, = nonzero(inpolygon(sx, sy, x, y))
   underIdx = []
-  for iIdx = range(len(inPolyIdx)):
+  for iIdx in range(len(inPolyIdx)):
     d = line_plane_intersect(x,y,z,sx[inPolyIdx[iIdx]],sy[inPolyIdx[iIdx]],sz[inPolyIdx[iIdx]])
-    if d[2]-sz(inPolyIdx[iIdx]) < 0:
+    if (d[2]-sz[inPolyIdx[iIdx]]) < 0:
       underIdx += [inPolyIdx[iIdx]]
 
   # Apply static offset to the points that lie underneath the current triangle
@@ -165,15 +173,16 @@ def line_plane_intersect(x, y, z, sx, sy, sz):
                        [z[0], z[1], z[2], -sz]])
   denominator = det(denominator)
   if denominator == 0:
-    denominator = eps
+    print('hey')
+    denominator = 1e-10
 
   t = numerator/denominator # parametric curve parameter
-  d = array([sx sy sz])-array([0 0 -sz])*t
+  d = array([sx,sy,sz])-array([0,0,-sz])*t
   return d
 
 def swap(a,b):
-  a = np.copy(a)
-  b = np.copy(b)
+  a = copy(a)
+  b = copy(b)
   return b,a
 
 def rotate_xy_vec(x, y, alpha):
