@@ -1,3 +1,7 @@
+''' 
+This module is a near literal translation of the Matlab code provide 
+by Brendan Meade.
+'''
 from __future__ import division
 from numpy import (pi,cross,dot,sin,cos,tan,arctan2,
                    sqrt,array,asarray,zeros,empty)
@@ -113,8 +117,8 @@ def CalcTriStrains(sx, sy, sz, x, y, z, pr, ss, ts, ds):
       if beta < -pi/2:
          beta = pi/2-abs(beta)
 
-    ssVec = [cos(strike/180*pi),sin(strike/180*pi),0]
-    tsVec = [-sin(strike/180*pi),cos(strike/180*pi),0]
+    ssVec = array([cos(strike/180*pi),sin(strike/180*pi),0])
+    tsVec = array([-sin(strike/180*pi),cos(strike/180*pi),0])
     dsVec = cross(ssVec, tsVec)
     lss = dot(slipVec,ssVec)
     lts = dot(slipVec,tsVec)
@@ -160,9 +164,9 @@ def swap(a,b):
 
 def RotateXyVec(x,y,alpha):
   # Rotate a vector by an angle alpha
-  alpha                         = pi/180*alpha
-  xp                            = cos(alpha)*x - sin(alpha)*y
-  yp                            = sin(alpha)*x + cos(alpha)*y
+  alpha = pi/180*alpha
+  xp = cos(alpha)*x - sin(alpha)*y
+  yp = sin(alpha)*x + cos(alpha)*y
   return xp,yp
 
 def advs(y1,y2,y3,a,b,nu,B1,B2,B3):
